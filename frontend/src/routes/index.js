@@ -6,7 +6,7 @@ import Login from "../pages/Login";
 import SignUP from "../pages/SignUP";
 import Adminpanel from "../pages/Adminpanel";
 import AllUsers from "../pages/AllUsers";
-import AllProducts from "../pages/AllProducts";
+import AllDoctors from "../pages/AllDoctors";
 
 
 
@@ -43,8 +43,8 @@ const router  = createBrowserRouter([
                         element: <AllUsers/>
                     },
                     {
-                        path: "all-products",
-                        element: <AllProducts/>
+                        path: "all-doctors",
+                        element: <AllDoctors/>
                     }
                 ]
             },

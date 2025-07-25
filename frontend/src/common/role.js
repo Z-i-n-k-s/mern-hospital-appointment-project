@@ -1,5 +1,6 @@
 const ROLE = {
     ADMIN : "ADMIN",
+    DOCTOR : "DOCTOR",
     GENERAL : "GENERAL"
 }
 

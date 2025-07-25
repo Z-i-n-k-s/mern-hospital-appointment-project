@@ -14,10 +14,12 @@ const userDeleteController = require('../controller/User/userDelete')
 
 const updateProfile = require('../controller/User/updateProfile')
 
-const UploadProductController = require('../controller/Product/uploadProduct')
-const getProductController = require('../controller/Product/getProduct')
-const updateProductController = require('../controller/Product/updateProduct')
-const getCatagoryProduct = require('../controller/Product/getCatagoryProduct')
+
+const uploadDoctorController = require('../controller/Doctor/uploadDoctors')
+const getDoctorsController = require('../controller/Doctor/getDoctors')
+const updateDoctorController = require('../controller/Doctor/updateDoctors')
+const getCategoryDoctors = require('../controller/Doctor/getCatagoryDoctors')
+const deleteDoctorController = require('../controller/Doctor/deleteDoctorController')
 
 
 router.post("/signup",userSignUpController)
@@ -33,10 +35,16 @@ router.post("/update-user",authToken,updateUser)
 router.post("/update-profile",authToken,updateProfile)
 router.post("/delete-user",authToken,userDeleteController)
 
-//product
-router.post("/upload-product",authToken,UploadProductController)
-router.get("/get-product",getProductController)
-router.post("/update-product",authToken,updateProductController)
-router.get("/get-categoryProduct",getCatagoryProduct)
+
+
+//Doctors
+
+router.post("/upload-doctor", authToken, uploadDoctorController);
+router.get("/get-doctors", getDoctorsController);
+router.post("/update-doctor", authToken, updateDoctorController);
+router.get("/get-categoryDoctors", getCategoryDoctors);
+router.delete('/delete-doctor', authToken, deleteDoctorController);
+
+
 
 module.exports = router

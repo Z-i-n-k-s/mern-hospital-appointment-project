@@ -1,6 +1,6 @@
 const userModel = require("../models/userModel")
 
-const uploadproductpermission = async(userId) =>{
+const uploadpermission = async(userId) =>{
     const user = await userModel.findById(userId)
     if(user.role !== "ADMIN"){
         return false
@@ -10,4 +10,4 @@ const uploadproductpermission = async(userId) =>{
     }
 }
 
-module.exports = uploadproductpermission
+module.exports = uploadpermission
