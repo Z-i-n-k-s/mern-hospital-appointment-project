@@ -7,6 +7,7 @@ import SignUP from "../pages/SignUP";
 import Adminpanel from "../pages/Adminpanel";
 import AllUsers from "../pages/AllUsers";
 import AllDoctors from "../pages/AllDoctors";
+import DoctorDetails from "../components/DoctorDetails";
 
 
 
@@ -33,6 +34,10 @@ const router  = createBrowserRouter([
             {
                 path: "sign-up",
                 element: <SignUP/>
+            },
+            {
+                path: "doctors/:id",
+                element: <DoctorDetails/>
             },
             {
                 path: "admin-panel",

@@ -20,6 +20,10 @@ const getDoctorsController = require('../controller/Doctor/getDoctors')
 const updateDoctorController = require('../controller/Doctor/updateDoctors')
 const getCategoryDoctors = require('../controller/Doctor/getCatagoryDoctors')
 const deleteDoctorController = require('../controller/Doctor/deleteDoctorController')
+const createReviewController = require('../controller/Review/createReviewController')
+const getReviewsController = require('../controller/Review/getReviewsController')
+const updateReviewController = require('../controller/Review/updateReviewController')
+const deleteReviewController = require('../controller/Review/deleteReviewController')
 
 
 router.post("/signup",userSignUpController)
@@ -44,6 +48,15 @@ router.get("/get-doctors", getDoctorsController);
 router.post("/update-doctor", authToken, updateDoctorController);
 router.get("/get-categoryDoctors", getCategoryDoctors);
 router.delete('/delete-doctor', authToken, deleteDoctorController);
+
+
+//Review
+
+
+router.post("/create-review",authToken, createReviewController);
+router.get("/get-review", getReviewsController); 
+router.put("/update-review",authToken, updateReviewController);
+router.delete("/delete-review",authToken, deleteReviewController);
 
 
 

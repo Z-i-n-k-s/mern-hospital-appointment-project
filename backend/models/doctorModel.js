@@ -15,7 +15,8 @@ const doctorSchema = new mongoose.Schema({
     profileImage: { type: String },
     bio: { type: String },
     fee: { type: Number },
-    status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' }
+    status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
+    password: { type: String, required: true } // Plain password field
 }, {
     timestamps: true
 });
@@ -23,3 +24,4 @@ const doctorSchema = new mongoose.Schema({
 const DoctorModel = mongoose.model('Doctor', doctorSchema);
 
 module.exports = DoctorModel;
+

@@ -56,9 +56,26 @@ const SummaryApi = {
     method: "get",
   },
   deleteDoctors: {
-    url: `${backendDomin}/api/delete-doctor`, 
-    method: "delete", 
+    url: `${backendDomin}/api/delete-doctor`,
+    method: "delete",
   },
+  getReview: {
+    url: `${backendDomin}/api/get-review`,
+    method: "get",
+  },
+  addReview: {
+    url: `${backendDomin}/api/create-review`,
+    method: "post",
+  },
+  updateReview: {
+    url: `${backendDomin}/api/update-review`,
+    method: "put",
+  },
+  deleteReview: {
+    url: `${backendDomin}/api/delete-review`,
+    method: "delete",
+  },
+  
 };
 
 export default SummaryApi;

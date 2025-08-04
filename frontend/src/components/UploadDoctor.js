@@ -21,7 +21,8 @@ const UploadDoctor = ({ onClose, fetchData }) => {
     availableDays: [],
     bio: "",
     fee: "",
-    profileImage: "" // single base64 string
+    profileImage: "",
+    password: "" // added
   });
 
   const [timeRange, setTimeRange] = useState({ from: "", to: "" });
@@ -51,12 +52,17 @@ const UploadDoctor = ({ onClose, fetchData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!data.fullName || !data.category || !data.email || !data.phone) {
+
+    if (!data.fullName || !data.category || !data.email || !data.phone || !data.password) {
       toast.error("Please fill all required fields");
       return;
     }
 
-    // Merge time range into payload
+    if (data.fee && Number(data.fee) < 0) {
+      toast.error("Fee cannot be negative");
+      return;
+    }
+
     const payload = {
       ...data,
       availableTime: timeRange.from && timeRange.to ? `${timeRange.from} - ${timeRange.to}` : ""
@@ -95,43 +101,30 @@ const UploadDoctor = ({ onClose, fetchData }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Personal Info */}
+          {/* Required Fields */}
           <div className="space-y-2">
             <label className="font-medium">Full Name<span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="fullName"
-              value={data.fullName}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              placeholder="e.g. Dr. John Doe"
-              required
-            />
+            <input type="text" name="fullName" value={data.fullName} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="e.g. Dr. John Doe" required />
           </div>
 
           <div className="space-y-2">
             <label className="font-medium">Email<span className="text-red-500">*</span></label>
-            <input
-              type="email"
-              name="email"
-              value={data.email}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              placeholder="name@example.com"
-              required
-            />
+            <input type="email" name="email" value={data.email} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="name@example.com" required />
           </div>
 
-          {/* Category & Specialization */}
+          <div className="space-y-2">
+            <label className="font-medium">Password<span className="text-red-500">*</span></label>
+            <input type="password" name="password" value={data.password} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="Create a password" required />
+          </div>
+
+          {/* Dropdowns */}
           <div className="space-y-2">
             <label className="font-medium">Category<span className="text-red-500">*</span></label>
-            <select
-              name="category"
-              value={data.category}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              required
-            >
+            <select name="category" value={data.category} onChange={handleOnChange}
+              className="w-full p-3 border rounded" required>
               <option value="">Select Category</option>
               {doctorCategory.map((c) => (
                 <option key={c.value} value={c.value}>{c.label}</option>
@@ -140,97 +133,86 @@ const UploadDoctor = ({ onClose, fetchData }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="font-medium">Specialization</label>
-            <input
-              type="text"
-              name="specialization"
-              value={data.specialization}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              placeholder="e.g. Pediatric Cardiology"
-            />
+            <label className="font-medium">Gender</label>
+            <select name="gender" value={data.gender} onChange={handleOnChange}
+              className="w-full p-3 border rounded">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
 
-          {/* Contact & Chamber */}
+          <div className="space-y-2">
+            <label className="font-medium">Specialization</label>
+            <input type="text" name="specialization" value={data.specialization} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="e.g. Pediatric Cardiology" />
+          </div>
+
           <div className="space-y-2">
             <label className="font-medium">Phone<span className="text-red-500">*</span></label>
-            <input
-              type="tel"
-              name="phone"
-              value={data.phone}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              placeholder="e.g. +8801XXXXXXXXX"
-              required
-            />
+            <input type="tel" name="phone" value={data.phone} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="e.g. +8801XXXXXXXXX" required />
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-medium">Qualification</label>
+            <input type="text" name="qualification" value={data.qualification} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="e.g. MBBS, FCPS" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-medium">Experience (years)</label>
+            <input type="number" name="experience" value={data.experience} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="e.g. 5" min="0" />
           </div>
 
           <div className="space-y-2">
             <label className="font-medium">Chamber Address</label>
-            <input
-              type="text"
-              name="chamberAddress"
-              value={data.chamberAddress}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              placeholder="Full address"
-            />
+            <input type="text" name="chamberAddress" value={data.chamberAddress} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="Full address" />
           </div>
 
-          {/* Days & Time */}
+          {/* Days */}
           <div className="col-span-1 md:col-span-2 space-y-2">
             <label className="font-medium">Available Days</label>
             <div className="flex flex-wrap gap-4">
               {weekDays.map((day) => (
                 <label key={day} className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    value={day}
-                    checked={data.availableDays.includes(day)}
-                    onChange={handleAvailableDaysChange}
-                    className="form-checkbox h-5 w-5 text-indigo-600"
-                  />
+                  <input type="checkbox" value={day} checked={data.availableDays.includes(day)}
+                    onChange={handleAvailableDaysChange} className="form-checkbox h-5 w-5" />
                   <span className="ml-2">{day}</span>
                 </label>
               ))}
             </div>
           </div>
 
+          {/* Time */}
           <div className="space-y-2">
             <label className="font-medium">Available Time</label>
             <div className="flex gap-2">
-              <input
-                type="time"
-                value={timeRange.from}
-                onChange={(e) => setTimeRange((prev) => ({ ...prev, from: e.target.value }))}
-                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              />
+              <input type="time" value={timeRange.from} onChange={(e) =>
+                setTimeRange((prev) => ({ ...prev, from: e.target.value }))}
+                className="p-3 border rounded" />
               <span className="self-center">to</span>
-              <input
-                type="time"
-                value={timeRange.to}
-                onChange={(e) => setTimeRange((prev) => ({ ...prev, to: e.target.value }))}
-                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              />
+              <input type="time" value={timeRange.to} onChange={(e) =>
+                setTimeRange((prev) => ({ ...prev, to: e.target.value }))}
+                className="p-3 border rounded" />
             </div>
           </div>
 
-          {/* Profile Image Upload */}
+          {/* Profile Image */}
           <div className="col-span-1 md:col-span-2 space-y-2">
             <label className="font-medium">Profile Image</label>
             <div className="flex items-center gap-4">
               <label htmlFor="uploadProfileImageInput" className="cursor-pointer">
-                <div className="w-32 h-32 bg-gray-100 border border-dashed border-gray-300 rounded flex justify-center items-center hover:bg-gray-200">
+                <div className="w-32 h-32 bg-gray-100 border border-dashed rounded flex justify-center items-center hover:bg-gray-200">
                   {data.profileImage ? (
-                    <img
-                      src={data.profileImage}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded"
+                    <img src={data.profileImage} alt="Preview" className="w-full h-full object-cover rounded"
                       onClick={() => {
                         setFullScreenImage(data.profileImage);
                         setOpenFullScreenImage(true);
-                      }}
-                    />
+                      }} />
                   ) : (
                     <div className="flex flex-col items-center text-gray-500">
                       <FaCloudUploadAlt className="text-3xl" />
@@ -238,22 +220,11 @@ const UploadDoctor = ({ onClose, fetchData }) => {
                     </div>
                   )}
                 </div>
-                <input
-                  type="file"
-                  id="uploadProfileImageInput"
-                  className="hidden"
-                  onChange={handleUploadProfilePic}
-                  accept="image/*"
-                />
+                <input type="file" id="uploadProfileImageInput" className="hidden" onChange={handleUploadProfilePic} accept="image/*" />
               </label>
               {data.profileImage && (
-                <button
-                  type="button"
-                  onClick={() => setData((prev) => ({ ...prev, profileImage: "" }))}
-                  className="text-red-600 hover:underline"
-                >
-                  Remove Image
-                </button>
+                <button type="button" onClick={() => setData((prev) => ({ ...prev, profileImage: "" }))}
+                  className="text-red-600 hover:underline">Remove Image</button>
               )}
             </div>
           </div>
@@ -261,34 +232,21 @@ const UploadDoctor = ({ onClose, fetchData }) => {
           {/* Bio */}
           <div className="col-span-1 md:col-span-2 space-y-2">
             <label className="font-medium">Bio</label>
-            <textarea
-              name="bio"
-              value={data.bio}
-              onChange={handleOnChange}
-              rows={4}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100 resize-none"
-              placeholder="Short biography or description"
-            />
+            <textarea name="bio" value={data.bio} onChange={handleOnChange} rows={4}
+              className="w-full p-3 border rounded resize-none" placeholder="Short biography or description" />
           </div>
 
-          {/* Fee & Submit */}
+          {/* Fee */}
           <div className="space-y-2">
             <label className="font-medium">Consultation Fee</label>
-            <input
-              type="number"
-              name="fee"
-              value={data.fee}
-              onChange={handleOnChange}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-100"
-              placeholder="e.g. 500"
-            />
+            <input type="number" name="fee" value={data.fee} onChange={handleOnChange}
+              className="w-full p-3 border rounded" placeholder="e.g. 500" />
           </div>
 
+          {/* Submit */}
           <div className="col-span-1 md:col-span-2 flex justify-end">
-            <button
-              type="submit"
-              className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-            >
+            <button type="submit"
+              className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
               Upload Doctor
             </button>
           </div>
