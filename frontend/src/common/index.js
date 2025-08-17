@@ -1,4 +1,3 @@
-import SignUP from "../pages/SignUP";
 
 const backendDomin = process.env.REACT_APP_BACKEND_URL; //"http://localhost:8080"
 
@@ -75,7 +74,46 @@ const SummaryApi = {
     url: `${backendDomin}/api/delete-review`,
     method: "delete",
   },
-  
+  addPrescription: {
+    url: `${backendDomin}/api/create-prescription`,
+    method: "post",
+  },
+  updatePrescription: {
+    url: `${backendDomin}/api/update-prescription`,
+    method: "put",
+  },
+  deletePrescription: {
+    url: `${backendDomin}/api/delete-prescription`,
+    method: "delete",
+  },
+  getPrescriptionById: {
+    url: `${backendDomin}/api/get-prescription`, 
+    method: "get",
+  },
+  createHealthTip: {
+    url: `${backendDomin}/api/create-health-tip`,
+    method: "post",
+  },
+  getHealthTipsByPatientDoctor: {
+    url: `${backendDomin}/api/get-health-tips-by-patient-doctor`,
+    method: "post",
+  },
+  getHealthTipsByPatient: {
+    url: `${backendDomin}/api/get-health-tips-by-patient`,
+    method: "post",
+  },
+  getHealthTipsByDoctor: {
+    url: `${backendDomin}/api/get-health-tips-by-doctor`,
+    method: "post",
+  },
+  updateHealthTip: {
+    url: `${backendDomin}/api/update-health-tip`,
+    method: "put",
+  },
+  deleteHealthTip: {
+    url: `${backendDomin}/api/delete-health-tip`,
+    method: "delete",
+  },
 };
 
 export default SummaryApi;

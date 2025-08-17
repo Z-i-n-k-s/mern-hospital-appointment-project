@@ -161,7 +161,7 @@ const DoctorDetails = () => {
       {/* Reviews & Health Tips */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ReviewSection doctorId={id} />
-        <HealthTipsSection doctorId={id} />
+          <HealthTipsSection doctorId={id} doctorName={doctor.fullName} />
       </div>
     </div>
   );

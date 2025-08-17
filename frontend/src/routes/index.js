@@ -8,6 +8,7 @@ import Adminpanel from "../pages/Adminpanel";
 import AllUsers from "../pages/AllUsers";
 import AllDoctors from "../pages/AllDoctors";
 import DoctorDetails from "../components/DoctorDetails";
+import Prescriptions from "../pages/Prescriptions";
 
 
 
@@ -38,6 +39,10 @@ const router  = createBrowserRouter([
             {
                 path: "doctors/:id",
                 element: <DoctorDetails/>
+            },
+            {
+                path: "prescriptions",
+                element: <Prescriptions/>
             },
             {
                 path: "admin-panel",

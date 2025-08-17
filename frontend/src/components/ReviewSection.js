@@ -68,7 +68,7 @@ const ReviewSection = ({ doctorId }) => {
   const handleUpdate = async (id, newComment) => {
     try {
       const res = await fetch(SummaryApi.updateReview.url, {
-        method: "PUT",
+        method: SummaryApi.updateReview.method,
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, comment: newComment }),

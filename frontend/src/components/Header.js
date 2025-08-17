@@ -1,140 +1,147 @@
 import React, { useState } from "react";
-import { BsCart4 } from "react-icons/bs";
-import { FaUserLarge } from "react-icons/fa6";
-import { IoSearchSharp } from "react-icons/io5";
+import { FaUserCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Logo from "./Logo";
+import { Link, useNavigate } from "react-router-dom";
 import SummaryApi from "../common";
-import { toast } from 'react-toastify'
-import { setUserDetails } from '../store/userSlice'
+import { toast } from "react-toastify";
+import { setUserDetails } from "../store/userSlice";
 import ROLE from "../common/role";
 import ProfileDisplay from "./ProfileDisplay";
 
 const Header = () => {
-  const user = useSelector(state => state?.user?.user)
-  const dispatch = useDispatch()
-  const [menuDisplay,setMenuDisplay]=useState(false)
-  const [profileDisplay,setProfileDisplay]=useState(false)
-  //console.log("user header", user)
-  
+  const navigate = useNavigate();
+  const user = useSelector((state) => state?.user?.user);
+  const dispatch = useDispatch();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
-
-  const handelLogout = async () => {
-    const fetchData = await fetch(SummaryApi.logout_user.url, {
+const handleLogout = async () => {
+  try {
+    const res = await fetch(SummaryApi.logout_user.url, {
       method: SummaryApi.logout_user.method,
-      credentials: 'include'
-    })
-    const data = await fetchData.json()
+      credentials: "include",
+    });
+    const data = await res.json();
     if (data.success) {
-      toast.success(data.message)
-      dispatch(setUserDetails(null))
+      toast.success(data.message);
+      dispatch(setUserDetails(null));
+      setMenuOpen(false);
+      navigate("/");  
+    } else if (data.error) {
+      toast.error(data.message);
     }
-    if (data.error) {
-      toast.error(data.message)
-    }
+  } catch (error) {
+    toast.error("Logout failed, please try again.");
   }
+};
+
   return (
-    <header className="h-16 shadow-md bg-white">
-      <div className="h-full container mx-auto flex items-center px-4 justify-between">
-        <div className="">
-          <Link to={"/"}>
-            <Logo w={170} h={60} />
-          </Link>
-        </div>
-        <div className="hidden lg:flex items-center w-full justify-between max-w-sm border-2 rounded-full focus-within:shadow-md pl-3">
-          <input
-            type="text"
-            placeholder="Find your items...."
-            className="w-full outline-none "
-          />
-          <div className="text:lg min-w-[50px] h-8 bg-red-500 flex items-center justify-center rounded-full text-white">
-            <IoSearchSharp />
-          </div>
-        </div>
-        <div className="flex items-center gap-7">
-            
-            <div className="relative flex justify-center">
+    <header className="bg-white shadow-md sticky top-0 z-50">
+      <div className="container mx-auto flex items-center justify-between h-16 px-4 md:px-8">
+        {/* Left: Logo + Project Name */}
+        <Link to="/" className="flex items-center gap-3">
+         
+          <h1 className="text-2xl font-bold text-indigo-700 select-none">
+            ChikitshaTrack
+          </h1>
+        </Link>
 
-              {
-                user?._id &&(
-                  <div className="text-2xl cursor-pointer relative flex justify-center" onClick={()=>setMenuDisplay(preve => !preve )}>
-                  {
-                    user?.profilePic ? (
-                      <img src={user?.profilePic} className="w-10 h-10 rounded-full" alt={user?.name} />
-                    ) : (
-                      <FaUserLarge />
-                    )
-                    
-                  }
-      
-                </div>
-                )
-              }
-            
+        {/* Right: User & Navigation */}
+        <div className="flex items-center gap-6 relative">
+          {user?._id ? (
+            <>
+              {/* User Avatar */}
+              <button
+                onClick={() => setMenuOpen((open) => !open)}
+                className="relative flex items-center focus:outline-none"
+                aria-haspopup="true"
+                aria-expanded={menuOpen}
+                aria-label="User menu"
+              >
+                {user.profilePic ? (
+                  <img
+                    src={user.profilePic}
+                    alt={user.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                ) : (
+                  <FaUserCircle className="text-indigo-600 w-10 h-10" />
+                )}
+              </button>
 
-
-              {
-                menuDisplay &&(
-                  <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded">
-                  <nav>
-                    {
-                      user?.role === ROLE.ADMIN &&(
-                        <Link to={"/admin-panel/all-users"} className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2" onClick={()=>setMenuDisplay(preve => !preve )}>Admin Panel</Link>
-                        
-                      )
-                    }
-                  </nav>
-                  <div className="flex justify-center">
-                  <button  className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
-                  onClick={() => {
-                   
-                    setProfileDisplay(true);
-                  }}>
+              {/* Dropdown Menu */}
+              {menuOpen && (
+                <div
+                  className="absolute right-0 top-12 w-48 bg-white border border-gray-200 rounded shadow-lg py-2 text-sm"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-label="User menu options"
+                >
+                  {user.role === ROLE.ADMIN && (
+                    <Link
+                      to="/admin-panel/all-users"
+                      className="block px-4 py-2 hover:bg-indigo-50"
+                      onClick={() => setMenuOpen(false)}
+                      role="menuitem"
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      setProfileOpen(true);
+                      setMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-indigo-50"
+                    role="menuitem"
+                  >
                     Profile
-                    </button>
-                    </div>
-                
-              </div>
-                )
-              }
-          
-            </div>
-            {profileDisplay && (
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/prescriptions");
+                      setMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-indigo-50"
+                    role="menuitem"
+                  >
+                    Prescriptions
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                    role="menuitem"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+            >
+              Log In
+            </Link>
+          )}
+        </div>
+
+        {/* Profile Modal */}
+        {profileOpen && user && (
           <ProfileDisplay
-            onClose={() => setProfileDisplay(false)}
+            onClose={() => setProfileOpen(false)}
             name={user.name}
             email={user.email}
             role={user.role}
             userId={user._id}
             profilePic={user.profilePic}
-            callFunc={handelLogout}
+            callFunc={handleLogout}
           />
         )}
-
-
-          
-          <div>
-            {
-              user?._id ? (
-                <button onClick={handelLogout} className="px-3 py-1 rounded-full text-white bg-red-500 hover:bg-red-700 flex items-center justify-center ">Logout</button>
-              )
-                : (
-                  <Link to={"/login"} className="px-3 py-1 rounded-full text-white bg-red-500 hover:bg-red-700 flex items-center justify-center ">LogIn</Link>
-                )
-            }
-
-          </div>
-        </div>
       </div>
     </header>
   );
 };
 
 export default Header;
-
-
-
-//for hovering
-//group
-// hidden group-hover:block
