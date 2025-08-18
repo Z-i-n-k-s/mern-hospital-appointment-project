@@ -1,10 +1,11 @@
-// src/pages/DoctorDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SummaryApi from "../common";
 import { CgCalendarDates } from "react-icons/cg";
 import HealthTipsSection from "./HealthTipsSection";
 import ReviewSection from "./ReviewSection";
+import AppointmentModule from "./AppointmentModule";
+import { useSelector } from "react-redux";
 
 const DoctorDetails = () => {
   const { id } = useParams();
@@ -14,6 +15,9 @@ const DoctorDetails = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAppointment, setShowAppointment] = useState(false);
+
+  const user = useSelector((state) => state?.user?.user);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -32,7 +36,7 @@ const DoctorDetails = () => {
         if (!doc) throw new Error("Doctor not found");
         setDoctor(doc);
 
-        // get up to 4 other active doctors in the same category
+        // up to 4 similar suggestions
         const sameCat = allDocs
           .filter(
             (d) =>
@@ -56,6 +60,15 @@ const DoctorDetails = () => {
   if (loading) return <p className="text-center py-10">Loading…</p>;
   if (error) return <p className="text-center text-red-500 py-10">{error}</p>;
   if (!doctor) return null;
+
+  const handleMakeAppointment = () => {
+    if (!user) {
+      // if not logged in → redirect to login
+      nav("/login");
+      return;
+    }
+    setShowAppointment(true);
+  };
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8 space-y-8">
@@ -83,12 +96,26 @@ const DoctorDetails = () => {
           </div>
         </div>
         <button
-          onClick={() => nav(`/appointments/new?doctorId=${id}`)}
+          onClick={handleMakeAppointment}
           className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
         >
           <CgCalendarDates className="mr-2 text-xl" /> Make Appointment
         </button>
       </div>
+
+      {/* Appointment Module (only when logged in + button clicked) */}
+      {showAppointment && (
+        <AppointmentModule
+          doctorId={doctor._id}
+          doctorName={doctor.fullName}
+          availability={{
+            days: doctor.availableDays || [],
+            time: doctor.availableTime || "",
+            fee: doctor.fee != null ? doctor.fee : 0, // pass numeric fee
+          }}
+          onClose={() => setShowAppointment(false)}
+        />
+      )}
 
       {/* Details Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-2xl shadow">
@@ -161,7 +188,7 @@ const DoctorDetails = () => {
       {/* Reviews & Health Tips */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ReviewSection doctorId={id} />
-          <HealthTipsSection doctorId={id} doctorName={doctor.fullName} />
+        <HealthTipsSection doctorId={id} doctorName={doctor.fullName} />
       </div>
     </div>
   );

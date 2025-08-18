@@ -108,6 +108,16 @@ const handleLogout = async () => {
                     Prescriptions
                   </button>
                   <button
+                    onClick={() => {
+                      navigate("/appointment");
+                      setMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-indigo-50"
+                    role="menuitem"
+                  >
+                    Appointments
+                  </button>
+                  <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
                     role="menuitem"

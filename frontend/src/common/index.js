@@ -114,6 +114,26 @@ const SummaryApi = {
     url: `${backendDomin}/api/delete-health-tip`,
     method: "delete",
   },
+    createAppointment: {
+    url: `${backendDomin}/api/create-appointment`,
+    method: "post",
+  },
+  confirmAppointment: {
+    url: `${backendDomin}/api/confirm-appointment`,
+    method: "put",
+  },
+  cancelAppointment: {
+    url: `${backendDomin}/api/cancel-appointment`,
+    method: "put",
+  },
+  getAppointmentsByPatient: {
+    url: `${backendDomin}/api/get-appointments-by-patient`,
+    method: "post",
+  },
+  getAppointmentsByDoctor: {
+    url: `${backendDomin}/api/get-appointments-by-doctor`,
+    method: "post",
+  },
 };
 
 export default SummaryApi;

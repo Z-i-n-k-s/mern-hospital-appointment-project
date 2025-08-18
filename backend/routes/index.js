@@ -34,6 +34,11 @@ const getHealthTipsByPatient = require('../controller/HealthTips/getHealthTipsBy
 const getHealthTipsByDoctor = require('../controller/HealthTips/getHealthTipsByDoctorController')
 const updateHealthTipController = require('../controller/HealthTips/updateHealthTipController')
 const deleteHealthTipController = require('../controller/HealthTips/deleteHealthTipController')
+const createAppointmentController = require('../controller/Appointments/createAppointmentController')
+const confirmAppointmentController = require('../controller/Appointments/confirmAppointmentController')
+const cancelAppointmentController = require('../controller/Appointments/cancelAppointmentController')
+const getAppointmentsByPatientController = require('../controller/Appointments/getAppointmentsByPatientController')
+const getAppointmentsByDoctorController = require('../controller/Appointments/getAppointmentsByDoctorController')
 
 
 router.post("/signup",userSignUpController)
@@ -52,7 +57,6 @@ router.post("/delete-user",authToken,userDeleteController)
 
 
 //Doctors
-
 router.post("/upload-doctor", authToken, uploadDoctorController);
 router.get("/get-doctors", getDoctorsController);
 router.post("/update-doctor", authToken, updateDoctorController);
@@ -61,16 +65,14 @@ router.delete('/delete-doctor', authToken, deleteDoctorController);
 
 
 //Review
-
-
 router.post("/create-review",authToken, createReviewController);
 router.get("/get-review", getReviewsController); 
 router.put("/update-review",authToken, updateReviewController);
 router.delete("/delete-review",authToken, deleteReviewController);
 
+
+
 //Prescriptions
-
-
 router.post("/create-prescription", authToken, createPrescriptionController);
 router.get("/get-prescription", authToken, getPrescriptionByIdController);
 router.put("/update-prescription/:id", authToken, updatePrescriptionController);
@@ -84,5 +86,15 @@ router.post("/get-health-tips-by-patient", getHealthTipsByPatient);
 router.post("/get-health-tips-by-doctor", getHealthTipsByDoctor);
 router.put("/update-health-tip", authToken, updateHealthTipController);
 router.delete("/delete-health-tip", authToken, deleteHealthTipController);
+
+// Appointment Routes
+router.post("/create-appointment", authToken, createAppointmentController);
+router.put("/confirm-appointment", authToken, confirmAppointmentController);
+router.put("/cancel-appointment", authToken, cancelAppointmentController);
+router.post("/get-appointments-by-patient", authToken, getAppointmentsByPatientController);
+router.post("/get-appointments-by-doctor", authToken, getAppointmentsByDoctorController);
+
+
+
 
 module.exports = router

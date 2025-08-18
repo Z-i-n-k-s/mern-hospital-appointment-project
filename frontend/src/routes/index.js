@@ -9,6 +9,7 @@ import AllUsers from "../pages/AllUsers";
 import AllDoctors from "../pages/AllDoctors";
 import DoctorDetails from "../components/DoctorDetails";
 import Prescriptions from "../pages/Prescriptions";
+import AllAppointments from "../pages/AllAppointments";
 
 
 
@@ -43,6 +44,10 @@ const router  = createBrowserRouter([
             {
                 path: "prescriptions",
                 element: <Prescriptions/>
+            },
+            {
+                path: "appointment",
+                element: <AllAppointments/>
             },
             {
                 path: "admin-panel",
