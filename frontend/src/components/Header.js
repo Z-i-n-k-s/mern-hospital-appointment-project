@@ -15,32 +15,31 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-const handleLogout = async () => {
-  try {
-    const res = await fetch(SummaryApi.logout_user.url, {
-      method: SummaryApi.logout_user.method,
-      credentials: "include",
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast.success(data.message);
-      dispatch(setUserDetails(null));
-      setMenuOpen(false);
-      navigate("/");  
-    } else if (data.error) {
-      toast.error(data.message);
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(SummaryApi.logout_user.url, {
+        method: SummaryApi.logout_user.method,
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(setUserDetails(null));
+        setMenuOpen(false);
+        navigate("/");
+      } else if (data.error) {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Logout failed, please try again.");
     }
-  } catch (error) {
-    toast.error("Logout failed, please try again.");
-  }
-};
+  };
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 md:px-8">
         {/* Left: Logo + Project Name */}
         <Link to="/" className="flex items-center gap-3">
-         
           <h1 className="text-2xl font-bold text-indigo-700 select-none">
             ChikitshaTrack
           </h1>
@@ -87,6 +86,18 @@ const handleLogout = async () => {
                       Admin Panel
                     </Link>
                   )}
+
+                  {user.role === ROLE.DOCTOR && (
+                    <Link
+                      to="/doctor-panel/all-patients-appointments"
+                      className="block px-4 py-2 hover:bg-indigo-50"
+                      onClick={() => setMenuOpen(false)}
+                      role="menuitem"
+                    >
+                      Doctor Panel
+                    </Link>
+                  )}
+
                   <button
                     onClick={() => {
                       setProfileOpen(true);
@@ -97,6 +108,7 @@ const handleLogout = async () => {
                   >
                     Profile
                   </button>
+
                   <button
                     onClick={() => {
                       navigate("/prescriptions");
@@ -107,16 +119,21 @@ const handleLogout = async () => {
                   >
                     Prescriptions
                   </button>
-                  <button
-                    onClick={() => {
-                      navigate("/appointment");
-                      setMenuOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2 hover:bg-indigo-50"
-                    role="menuitem"
-                  >
-                    Appointments
-                  </button>
+
+                  {/* Hide Appointments button if user is a doctor */}
+                  {user.role !== ROLE.DOCTOR && (
+                    <button
+                      onClick={() => {
+                        navigate("/appointment");
+                        setMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-indigo-50"
+                      role="menuitem"
+                    >
+                      Appointments
+                    </button>
+                  )}
+
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"

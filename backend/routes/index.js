@@ -39,6 +39,11 @@ const confirmAppointmentController = require('../controller/Appointments/confirm
 const cancelAppointmentController = require('../controller/Appointments/cancelAppointmentController')
 const getAppointmentsByPatientController = require('../controller/Appointments/getAppointmentsByPatientController')
 const getAppointmentsByDoctorController = require('../controller/Appointments/getAppointmentsByDoctorController')
+const createAnnouncementController = require('../controller/Announcements/createAnnouncementController')
+const getAllAnnouncementsController = require('../controller/Announcements/getAllAnnouncementsController')
+const editAnnouncementController = require('../controller/Announcements/editAnnouncementController')
+const deleteAnnouncementController = require('../controller/Announcements/deleteAnnouncementController')
+const createReplyController = require('../controller/HelthTipsReply/createReplyController')
 
 
 router.post("/signup",userSignUpController)
@@ -86,6 +91,7 @@ router.post("/get-health-tips-by-patient", getHealthTipsByPatient);
 router.post("/get-health-tips-by-doctor", getHealthTipsByDoctor);
 router.put("/update-health-tip", authToken, updateHealthTipController);
 router.delete("/delete-health-tip", authToken, deleteHealthTipController);
+router.post("/replies/create-reply", createReplyController);
 
 // Appointment Routes
 router.post("/create-appointment", authToken, createAppointmentController);
@@ -94,7 +100,11 @@ router.put("/cancel-appointment", authToken, cancelAppointmentController);
 router.post("/get-appointments-by-patient", authToken, getAppointmentsByPatientController);
 router.post("/get-appointments-by-doctor", authToken, getAppointmentsByDoctorController);
 
-
+// Announcement Routes
+router.post("/create-announcement", authToken, createAnnouncementController);
+router.get("/get-all-announcements", getAllAnnouncementsController);
+router.put("/edit-announcement", authToken, editAnnouncementController);
+router.delete("/delete-announcement", authToken, deleteAnnouncementController);
 
 
 module.exports = router

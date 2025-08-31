@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "./store/userSlice";
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const fetchUserDetails = async () => {
     const dataResponse = await fetch(SummaryApi.current_user.url, {
       method: SummaryApi.current_user.method,
@@ -20,14 +20,10 @@ function App() {
     });
     const dataApi = await dataResponse.json();
 
-
-    if(dataApi.success){
-      dispatch(setUserDetails(dataApi.data))
+    if (dataApi.success) {
+      console.log("data-user", dataApi);
+      dispatch(setUserDetails(dataApi.data));
     }
-
-
-
-   // console.log("data-user", dataResponse);
   };
   useEffect(() => {
     // user details
@@ -37,9 +33,11 @@ function App() {
 
   return (
     <>
-      <Context.Provider value={{
-        fetchUserDetails //user details fetch data 
-      }}>
+      <Context.Provider
+        value={{
+          fetchUserDetails, //user details fetch data
+        }}
+      >
         <ToastContainer />
 
         <Header />

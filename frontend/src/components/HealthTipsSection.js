@@ -18,15 +18,11 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
       const res = await fetch(SummaryApi.getHealthTipsByPatient.url, {
         method: SummaryApi.getHealthTipsByPatient.method,
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ patient: user._id }),
       });
-
       const json = await res.json();
       if (json.success) {
-        // Filter tips by doctorId to show only tips for the current doctor
         const filteredTips = json.data.filter((tip) => tip.doctor === doctorId);
         setTips(filteredTips);
       }
@@ -48,19 +44,15 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           doctor: doctorId,
-          doctorName: doctorName,
+          doctorName,
           patient: user._id,
           patientName: user.name,
           comment: newQuestion,
         }),
       });
-
       const json = await res.json();
-      if (json.success) {
-        // Add newly created tip only if it belongs to current doctor
-        if (json.data.doctor === doctorId) {
-          setTips([json.data, ...tips]);
-        }
+      if (json.success && json.data.doctor === doctorId) {
+        setTips([json.data, ...tips]);
         setNewQuestion("");
       }
     } catch (err) {
@@ -77,7 +69,6 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tipId: id, comment: editedQuestion }),
       });
-
       const json = await res.json();
       if (json.success) {
         setTips(tips.map((t) => (t._id === id ? json.data : t)));
@@ -98,7 +89,6 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tipId: id }),
       });
-
       const json = await res.json();
       if (json.success) {
         setTips(tips.filter((t) => t._id !== id));
@@ -111,11 +101,8 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
   const toggleAnswer = (id) => {
     setShowAnswerIds((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
+      if (newSet.has(id)) newSet.delete(id);
+      else newSet.add(id);
       return newSet;
     });
   };
@@ -129,9 +116,7 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
       <h2 className="text-xl font-semibold">Ask for Health Tips</h2>
 
       {!user?._id ? (
-        <p className="text-red-500 font-medium">
-          Please log in to ask health tips.
-        </p>
+        <p className="text-red-500 font-medium">Please log in to ask health tips.</p>
       ) : (
         <>
           <textarea
@@ -167,13 +152,13 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
                 <p className="text-gray-700 whitespace-pre-wrap break-words">{tip.comment}</p>
               )}
 
-              {tip.answer ? (
+              {tip.replies.length > 0 ? (
                 <>
                   <button
                     onClick={() => toggleAnswer(tip._id)}
                     className="text-sm text-indigo-700 font-semibold flex items-center gap-1 mt-2 hover:underline"
                     aria-expanded={showAnswerIds.has(tip._id)}
-                    aria-controls={`answer-${tip._id}`}
+                    aria-controls={`answers-${tip._id}`}
                   >
                     {showAnswerIds.has(tip._id) ? (
                       <>
@@ -187,12 +172,16 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
                   </button>
 
                   {showAnswerIds.has(tip._id) && (
-                    <p
-                      id={`answer-${tip._id}`}
-                      className="mt-1 text-indigo-800 font-medium whitespace-pre-wrap bg-indigo-50 p-3 rounded-lg border border-indigo-200 break-words"
+                    <div
+                      id={`answers-${tip._id}`}
+                      className="mt-1 space-y-2 bg-indigo-50 p-3 rounded-lg border border-indigo-200"
                     >
-                      {tip.answer}
-                    </p>
+                      {tip.replies.map((r) => (
+                        <p key={r._id} className="text-indigo-800 font-medium whitespace-pre-wrap break-words">
+                          {r.comment} <span className="text-gray-500 text-xs">— Dr. {r.doctorName}</span>
+                        </p>
+                      ))}
+                    </div>
                   )}
                 </>
               ) : (
@@ -200,8 +189,7 @@ const HealthTipsSection = ({ doctorId, doctorName }) => {
               )}
 
               <span className="text-sm text-gray-500 block mt-1">
-                — {tip.patientName || "Anonymous"}
-                {tip.doctorName && <> to Dr. {tip.doctorName}</>}
+                — {tip.patientName || "Anonymous"} {tip.doctorName && <>to Dr. {tip.doctorName}</>}
               </span>
 
               {user?._id === tip.patient && (

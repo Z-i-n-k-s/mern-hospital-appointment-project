@@ -1,4 +1,3 @@
-
 const backendDomin = process.env.REACT_APP_BACKEND_URL; //"http://localhost:8080"
 
 const SummaryApi = {
@@ -87,7 +86,7 @@ const SummaryApi = {
     method: "delete",
   },
   getPrescriptionById: {
-    url: `${backendDomin}/api/get-prescription`, 
+    url: `${backendDomin}/api/get-prescription`,
     method: "get",
   },
   createHealthTip: {
@@ -114,7 +113,12 @@ const SummaryApi = {
     url: `${backendDomin}/api/delete-health-tip`,
     method: "delete",
   },
-    createAppointment: {
+  createReply: {
+    url: `${backendDomin}/api/replies/create-reply`,
+    method: "post",
+  },
+
+  createAppointment: {
     url: `${backendDomin}/api/create-appointment`,
     method: "post",
   },
@@ -133,6 +137,22 @@ const SummaryApi = {
   getAppointmentsByDoctor: {
     url: `${backendDomin}/api/get-appointments-by-doctor`,
     method: "post",
+  },
+  createAnnouncement: {
+    url: `${backendDomin}/api/create-announcement`,
+    method: "post",
+  },
+  getAllAnnouncements: {
+    url: `${backendDomin}/api/get-all-announcements`,
+    method: "get",
+  },
+  editAnnouncement: {
+    url: `${backendDomin}/api/edit-announcement`,
+    method: "put",
+  },
+  deleteAnnouncement: {
+    url: `${backendDomin}/api/delete-announcement`,
+    method: "delete",
   },
 };
 
